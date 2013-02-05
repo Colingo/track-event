@@ -84,7 +84,7 @@ function setupMessage(client, options) {
     var origin = onMessage.origin
 
     window.addEventListener("message", function (ev) {
-        if (origin.indexOf(ev.origin) === -1) {
+        if (origin !== "*" && origin.indexOf(ev.origin) === -1) {
             return
         }
 

@@ -8,6 +8,30 @@
 
 Track events to multiple destinations
 
+## Motivation
+
+> Why not use segment's IO [analytics.js][7] instead?
+
+Analytics.js is cute but they force you to use the same dumbed down
+    API for all analytics services.
+
+`track-event` focuses on:
+
+ - Creating a single client for all services
+ - Calling service specific functions on the client so you send
+    your data to the analytics service in the exact format you
+    want
+ - Exposing the raw clients for custom functionality
+ - Being browserify compliant
+
+As a bonus it can also do RPC calls to another `track-event`
+    client through an iframe to basically allow you to track
+    users with a single cookie on a single tracking domain in
+    your cross domain applications.
+
+For example if you wanted to track your users in a chrome extension
+    or in a hangout app.
+
 ## Example (mixpanel)
 
 ```js
@@ -134,3 +158,4 @@ var client = Client({
   [4]: http://david-dm.org/Colingo/track-event
   [5]: http://ci.testling.com/Colingo/track-event.png
   [6]: http://ci.testling.com/Colingo/track-event
+  [7]: https://github.com/segmentio/analytics.js

@@ -1,6 +1,7 @@
 var console = require("console")
 
 var Client = require("../client")
+var distinctId = require("../distinctId")
 
 var client = Client({
     mixpanel: {
@@ -15,3 +16,7 @@ var client = Client({
 })
 
 console.log("in iframe")
+
+distinctId(client, function (err, result) {
+    console.log("Mixpanel's (iframe) distinctId", result)
+})

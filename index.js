@@ -4,4 +4,5 @@ module.exports = {
     , trackEvent: require("./trackEvent")
     , xhr: require("./xhr")
     , postMessage: require("./postMessage")
+    , distinctId: require("./distinctId")
 }

@@ -46,3 +46,7 @@ xhr(client, { some: "data" }, function (err, result) {
 postMessage(client, "track", ["some event iframe", {
     "some iframe": "property"
 }])
+
+postMessage(client, "distinctId", [function (err, result) {
+    console.log("Mixpanel's distinctId", result)
+}])

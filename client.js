@@ -6,6 +6,8 @@ var ever = require("ever")
 var window = require("global/window")
 var ReadySignal = require("ready-signal")
 
+var handlePostMessage = require("./lib/handlePostMessage")
+
 module.exports = Client
 
 var methods = require("./index")
@@ -15,8 +17,7 @@ function Client(options) {
     var client = {}
     setupMixpanel(client, options)
     setupXHR(client, options)
-    setupMessage(client, options)
-    setupPostMessage(client, options)
+    client.postMessage = handlePostMessage(options, onMessage)
 
     var gaOptions = options.ga
 
@@ -25,6 +26,11 @@ function Client(options) {
     }
 
     return client
+
+    function onMessage(method, args) {
+        args.unshift(client)
+        methods[method].apply(null, args)
+    }
 }
 
 function setupMixpanel(client, options) {
@@ -67,55 +73,5 @@ function setupXHR(client, options) {
                 "content-type": "application/json"
             }
         }, callback)
-    }
-}
-
-function setupMessage(client, options) {
-    var onMessage = options.onMessage
-
-    if (!onMessage) {
-        return
-    }
-
-    if (Array.isArray(onMessage)) {
-        onMessage = { origin: onMessage }
-    }
-
-    var origin = onMessage.origin
-
-    window.addEventListener("message", function (ev) {
-        if (origin !== "*" && origin.indexOf(ev.origin) === -1) {
-            return
-        }
-
-        var command = JSON.parse(ev.data)
-        var args = command.args
-        args.unshift(client)
-
-        methods[command.functionName].apply(null, args)
-    })
-}
-
-function setupPostMessage(client, options) {
-    var postMessageOptions = options.postMessage
-
-    if (!postMessageOptions) {
-        return
-    }
-
-    var ready = ReadySignal()
-    var iframe = postMessageOptions.iframe
-    var targetOrigin = postMessageOptions.origin
-
-    iframe.addEventListener("load", ready)
-
-    client.postMessage = callPostMessage
-
-    function callPostMessage(functionName, args) {
-        ready(function (ev) {
-            var target = iframe.contentWindow
-            var command = { functionName: functionName, args: args }
-            target.postMessage(JSON.stringify(command), targetOrigin)
-        })
     }
 }

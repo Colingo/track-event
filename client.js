@@ -19,6 +19,10 @@ function Client(options) {
     setupXHR(client, options)
     client.postMessage = handlePostMessage(options, onMessage)
 
+    if (options.log) {
+        client.loggingEnabled = true
+    }
+
     var gaOptions = options.ga
 
     if (gaOptions) {

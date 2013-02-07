@@ -2,7 +2,6 @@ var mixpanel = require("mixpanel-browserify")
 var ga = require("ga-browserify")
 var uuid = require("node-uuid")
 var xhr = require("xhr")
-var ever = require("ever")
 var window = require("global/window")
 var ReadySignal = require("ready-signal")
 
